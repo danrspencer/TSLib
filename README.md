@@ -1,4 +1,4 @@
 TSLib
 =====
 
-Simply creation of TypeScript Libraries
+Simplify creation of TypeScript Libraries
