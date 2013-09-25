@@ -200,14 +200,14 @@ interface NodeBuffer {
 *                   MODULES                     *
 *                                               *
 ************************************************/
-declare module "querystring" {
+declare module querystring {
     export function stringify(obj: any, sep?: string, eq?: string): string;
     export function parse(str: string, sep?: string, eq?: string, options?: { maxKeys?: number; }): any;
     export function escape(): any;
     export function unescape(): any;
 }
 
-declare module "events" {
+declare module events {
     export interface NodeEventEmitter {
         addListener(event: string, listener: Function): void;
         on(event: string, listener: Function): any;
@@ -231,10 +231,7 @@ declare module "events" {
     }
 }
 
-declare module "http" {
-    import events = require("events");
-    import net = require("net");
-    import stream = require("stream");
+declare module http {
 
     export interface Server extends events.NodeEventEmitter {
         listen(port: number, hostname?: string, backlog?: number, callback?: Function): void;
@@ -302,8 +299,7 @@ declare module "http" {
     export var globalAgent: Agent;
 }
 
-declare module "cluster" {
-    import child_process = require("child_process");
+declare module cluster {
 
     export interface ClusterSettings {
         exec: string;
@@ -339,8 +335,8 @@ declare module "cluster" {
     export function emit(event: string, arg1?: any, arg2?: any): void;
 }
 
-declare module "zlib" {
-    import stream = require("stream");
+declare module zlib {
+
     export interface ZlibOptions { chunkSize?: number; windowBits?: number; level?: number; memLevel?: number; strategy?: number; dictionary?: any; }
 
     export interface Gzip extends stream.ReadWriteStream { }
@@ -401,7 +397,7 @@ declare module "zlib" {
     export var Z_NULL: number;
 }
 
-declare module "os" {
+declare module os {
     export function tmpDir(): string;
     export function hostname(): string;
     export function type(): string;
@@ -417,10 +413,7 @@ declare module "os" {
     export var EOL: string;
 }
 
-declare module "https" {
-    import tls = require("tls");
-    import events = require("events");
-    import http = require("http");
+declare module https {
 
     export interface ServerOptions {
         pfx?: any;
@@ -470,7 +463,7 @@ declare module "https" {
     export var globalAgent: NodeAgent;
 }
 
-declare module "punycode" {
+declare module punycode {
     export function decode(string: string): string;
     export function encode(string: string): string;
     export function toUnicode(domain: string): string;
@@ -483,9 +476,7 @@ declare module "punycode" {
     export var version: any;
 }
 
-declare module "repl" {
-    import stream = require("stream");
-    import events = require("events");
+declare module repl {
 
     export interface ReplOptions {
         prompt?: string;
@@ -501,9 +492,7 @@ declare module "repl" {
     export function start(options: ReplOptions): events.NodeEventEmitter;
 }
 
-declare module "readline" {
-    import events = require("events");
-    import stream = require("stream");
+declare module readline {
 
     export interface ReadLine extends events.NodeEventEmitter {
         setPrompt(prompt: string, length: number): void;
@@ -523,7 +512,7 @@ declare module "readline" {
     export function createInterface(options: ReadLineOptions): ReadLine;
 }
 
-declare module "vm" {
+declare module vm {
     export interface Context { }
     export interface Script {
         runInThisContext(): void;
@@ -536,10 +525,7 @@ declare module "vm" {
     export function createScript(code: string, filename?: string): Script;
 }
 
-declare module "child_process" {
-    import events = require("events");
-    import stream = require("stream");
-
+declare module child_process {
     export interface ChildProcess extends events.NodeEventEmitter {
         stdin: stream.WritableStream;
         stdout: stream.ReadableStream;
@@ -585,7 +571,7 @@ declare module "child_process" {
     }): ChildProcess;
 }
 
-declare module "url" {
+declare module url {
     export interface Url {
         href: string;
         protocol: string;
@@ -604,7 +590,7 @@ declare module "url" {
     export function resolve(from: string, to: string): string;
 }
 
-declare module "dns" {
+declare module dns {
     export function lookup(domain: string, family: number, callback: (err: Error, address: string, family: number) =>void ): string;
     export function lookup(domain: string, callback: (err: Error, address: string, family: number) =>void ): string;
     export function resolve(domain: string, rrtype: string, callback: (err: Error, addresses: string[]) =>void ): string[];
@@ -619,9 +605,7 @@ declare module "dns" {
     export function reverse(ip: string, callback: (err: Error, domains: string[]) =>void ): string[];
 }
 
-declare module "net" {
-    import stream = require("stream");
-
+declare module net {
     export interface NodeSocket extends stream.ReadWriteStream {
         // Extended base methods
         write(str: string, encoding?: string, fd?: string): boolean;
@@ -672,9 +656,7 @@ declare module "net" {
     export function isIPv6(input: string): boolean;
 }
 
-declare module "dgram" {
-    import events = require("events");
-
+declare module dgram {
     export function createSocket(type: string, callback?: Function): Socket;
 
     interface Socket extends events.NodeEventEmitter {
@@ -690,122 +672,121 @@ declare module "dgram" {
     }
 }
 
-declare module "fs" {
-    import stream = require("stream");
+interface Stats {
+  isFile(): boolean;
+  isDirectory(): boolean;
+  isBlockDevice(): boolean;
+  isCharacterDevice(): boolean;
+  isSymbolicLink(): boolean;
+  isFIFO(): boolean;
+  isSocket(): boolean;
+  dev: number;
+  ino: number;
+  mode: number;
+  nlink: number;
+  uid: number;
+  gid: number;
+  rdev: number;
+  size: number;
+  blksize: number;
+  blocks: number;
+  atime: Date;
+  mtime: Date;
+  ctime: Date;
+}
 
-    interface Stats {
-        isFile(): boolean;
-        isDirectory(): boolean;
-        isBlockDevice(): boolean;
-        isCharacterDevice(): boolean;
-        isSymbolicLink(): boolean;
-        isFIFO(): boolean;
-        isSocket(): boolean;
-        dev: number;
-        ino: number;
-        mode: number;
-        nlink: number;
-        uid: number;
-        gid: number;
-        rdev: number;
-        size: number;
-        blksize: number;
-        blocks: number;
-        atime: Date;
-        mtime: Date;
-        ctime: Date;
-    }
+interface FSWatcher extends EventEmitter {
+  close(): void;
+}
 
-    interface FSWatcher extends EventEmitter {
-        close(): void;
-    }
+interface ReadStream extends stream.ReadableStream { }
+interface WriteStream extends stream.WritableStream { }
 
-    export interface ReadStream extends stream.ReadableStream { }
-    export interface WriteStream extends stream.WritableStream { }
+declare class fs {
 
-    export function rename(oldPath: string, newPath: string, callback?: Function): void;
-    export function renameSync(oldPath: string, newPath: string): void;
-    export function truncate(fd: string, len: number, callback?: Function): void;
-    export function truncateSync(fd: string, len: number): void;
-    export function chown(path: string, uid: number, gid: number, callback?: Function): void;
-    export function chownSync(path: string, uid: number, gid: number): void;
-    export function fchown(fd: string, uid: number, gid: number, callback?: Function): void;
-    export function fchownSync(fd: string, uid: number, gid: number): void;
-    export function lchown(path: string, uid: number, gid: number, callback?: Function): void;
-    export function lchownSync(path: string, uid: number, gid: number): void;
-    export function chmod(path: string, mode: string, callback?: Function): void;
-    export function chmodSync(path: string, mode: string): void;
-    export function fchmod(fd: string, mode: string, callback?: Function): void;
-    export function fchmodSync(fd: string, mode: string): void;
-    export function lchmod(path: string, mode: string, callback?: Function): void;
-    export function lchmodSync(path: string, mode: string): void;
-    export function stat(path: string, callback?: (err: Error, stats: Stats) =>any): Stats;
-    export function lstat(path: string, callback?: (err: Error, stats: Stats) =>any): Stats;
-    export function fstat(fd: string, callback?: (err: Error, stats: Stats) =>any): Stats;
-    export function statSync(path: string): Stats;
-    export function lstatSync(path: string): Stats;
-    export function fstatSync(fd: string): Stats;
-    export function link(srcpath: string, dstpath: string, callback?: Function): void;
-    export function linkSync(srcpath: string, dstpath: string): void;
-    export function symlink(srcpath: string, dstpath: string, type?: string, callback?: Function): void;
-    export function symlinkSync(srcpath: string, dstpath: string, type?: string): void;
-    export function readlink(path: string, callback?: (err: Error, linkString: string) =>any): void;
-    export function realpath(path: string, callback?: (err: Error, resolvedPath: string) =>any): void;
-    export function realpath(path: string, cache: string, callback: (err: Error, resolvedPath: string) =>any): void;
-    export function realpathSync(path: string, cache?: string): void;
-    export function unlink(path: string, callback?: Function): void;
-    export function unlinkSync(path: string): void;
-    export function rmdir(path: string, callback?: Function): void;
-    export function rmdirSync(path: string): void;
-    export function mkdir(path: string, mode?: string, callback?: Function): void;
-    export function mkdirSync(path: string, mode?: string): void;
-    export function readdir(path: string, callback?: (err: Error, files: string[]) => void): void;
-    export function readdirSync(path: string): string[];
-    export function close(fd: string, callback?: Function): void;
-    export function closeSync(fd: string): void;
-    export function open(path: string, flags: string, mode?: string, callback?: (err: Error, fd: string) =>any): void;
-    export function openSync(path: string, flags: string, mode?: string): void;
-    export function utimes(path: string, atime: number, mtime: number, callback?: Function): void;
-    export function utimesSync(path: string, atime: number, mtime: number): void;
-    export function futimes(fd: string, atime: number, mtime: number, callback?: Function): void;
-    export function futimesSync(fd: string, atime: number, mtime: number): void;
-    export function fsync(fd: string, callback?: Function): void;
-    export function fsyncSync(fd: string): void;
-    export function write(fd: string, buffer: NodeBuffer, offset: number, length: number, position: number, callback?: (err: Error, written: number, buffer: NodeBuffer) =>any): void;
-    export function writeSync(fd: string, buffer: NodeBuffer, offset: number, length: number, position: number): void;
-    export function read(fd: string, buffer: NodeBuffer, offset: number, length: number, position: number, callback?: (err: Error, bytesRead: number, buffer: NodeBuffer) => void): void;
-    export function readSync(fd: string, buffer: NodeBuffer, offset: number, length: number, position: number): any[];
-    export function readFile(filename: string, options: { encoding?: string; flag?: string; }, callback: (err: Error, data: any) => void ): void;
-    export function readFile(filename: string, callback: (err: Error, data: NodeBuffer) => void ): void;
-    export function readFileSync(filename: string): NodeBuffer;
-    export function readFileSync(filename: string, options: { encoding?: string; flag?: string; }): any;
-    export function writeFile(filename: string, data: any, callback?: (err: Error) => void): void;
-    export function writeFile(filename: string, data: any, options: { encoding?: string; mode?: number; flag?: string; }, callback?: (err: Error) => void): void;
-    export function writeFileSync(filename: string, data: any, options?: { encoding?: string; mode?: number; flag?: string; }): void;
-    export function appendFile(filename: string, data: any, options: { encoding?: string; mode?: number; flag?: string; }, callback?: (err: Error) => void): void;
-    export function appendFile(filename: string, data: any, callback?: (err: Error) => void): void;
-    export function appendFileSync(filename: string, data: any, options?: { encoding?: string; mode?: number; flag?: string; }): void;
-    export function watchFile(filename: string, listener: { curr: Stats; prev: Stats; }): void;
-    export function watchFile(filename: string, options: { persistent?: boolean; interval?: number; }, listener: { curr: Stats; prev: Stats; }): void;
-    export function unwatchFile(filename: string, listener?: Stats): void;
-    export function watch(filename: string, options?: { persistent?: boolean; }, listener?: (event: string, filename: string) =>any): FSWatcher;
-    export function exists(path: string, callback?: (exists: boolean) =>void ): void;
-    export function existsSync(path: string): boolean;
-    export function createReadStream(path: string, options?: {
+    rename(oldPath: string, newPath: string, callback?: Function): void;
+    renameSync(oldPath: string, newPath: string): void;
+    truncate(fd: string, len: number, callback?: Function): void;
+    truncateSync(fd: string, len: number): void;
+    chown(path: string, uid: number, gid: number, callback?: Function): void;
+    chownSync(path: string, uid: number, gid: number): void;
+    fchown(fd: string, uid: number, gid: number, callback?: Function): void;
+    fchownSync(fd: string, uid: number, gid: number): void;
+    lchown(path: string, uid: number, gid: number, callback?: Function): void;
+    lchownSync(path: string, uid: number, gid: number): void;
+    chmod(path: string, mode: string, callback?: Function): void;
+    chmodSync(path: string, mode: string): void;
+    fchmod(fd: string, mode: string, callback?: Function): void;
+    fchmodSync(fd: string, mode: string): void;
+    lchmod(path: string, mode: string, callback?: Function): void;
+    lchmodSync(path: string, mode: string): void;
+    stat(path: string, callback?: (err: Error, stats: Stats) =>any): Stats;
+    lstat(path: string, callback?: (err: Error, stats: Stats) =>any): Stats;
+    fstat(fd: string, callback?: (err: Error, stats: Stats) =>any): Stats;
+    statSync(path: string): Stats;
+    lstatSync(path: string): Stats;
+    fstatSync(fd: string): Stats;
+    link(srcpath: string, dstpath: string, callback?: Function): void;
+    linkSync(srcpath: string, dstpath: string): void;
+    symlink(srcpath: string, dstpath: string, type?: string, callback?: Function): void;
+    symlinkSync(srcpath: string, dstpath: string, type?: string): void;
+    readlink(path: string, callback?: (err: Error, linkString: string) =>any): void;
+    realpath(path: string, callback?: (err: Error, resolvedPath: string) =>any): void;
+    realpath(path: string, cache: string, callback: (err: Error, resolvedPath: string) =>any): void;
+    realpathSync(path: string, cache?: string): void;
+    unlink(path: string, callback?: Function): void;
+    unlinkSync(path: string): void;
+    rmdir(path: string, callback?: Function): void;
+    rmdirSync(path: string): void;
+    mkdir(path: string, mode?: string, callback?: Function): void;
+    mkdirSync(path: string, mode?: string): void;
+    readdir(path: string, callback?: (err: Error, files: string[]) => void): void;
+    readdirSync(path: string): string[];
+    close(fd: string, callback?: Function): void;
+    closeSync(fd: string): void;
+    open(path: string, flags: string, mode?: string, callback?: (err: Error, fd: string) =>any): void;
+    openSync(path: string, flags: string, mode?: string): void;
+    utimes(path: string, atime: number, mtime: number, callback?: Function): void;
+    utimesSync(path: string, atime: number, mtime: number): void;
+    futimes(fd: string, atime: number, mtime: number, callback?: Function): void;
+    futimesSync(fd: string, atime: number, mtime: number): void;
+    fsync(fd: string, callback?: Function): void;
+    fsyncSync(fd: string): void;
+    write(fd: string, buffer: NodeBuffer, offset: number, length: number, position: number, callback?: (err: Error, written: number, buffer: NodeBuffer) =>any): void;
+    writeSync(fd: string, buffer: NodeBuffer, offset: number, length: number, position: number): void;
+    read(fd: string, buffer: NodeBuffer, offset: number, length: number, position: number, callback?: (err: Error, bytesRead: number, buffer: NodeBuffer) => void): void;
+    readSync(fd: string, buffer: NodeBuffer, offset: number, length: number, position: number): any[];
+    readFile(filename: string, options: { encoding?: string; flag?: string; }, callback: (err: Error, data: any) => void ): void;
+    readFile(filename: string, callback: (err: Error, data: NodeBuffer) => void ): void;
+    readFileSync(filename: string): NodeBuffer;
+    readFileSync(filename: string, options: { encoding?: string; flag?: string; }): any;
+    writeFile(filename: string, data: any, callback?: (err: Error) => void): void;
+    writeFile(filename: string, data: any, options: { encoding?: string; mode?: number; flag?: string; }, callback?: (err: Error) => void): void;
+    writeFileSync(filename: string, data: any, options?: { encoding?: string; mode?: number; flag?: string; }): void;
+    appendFile(filename: string, data: any, options: { encoding?: string; mode?: number; flag?: string; }, callback?: (err: Error) => void): void;
+    appendFile(filename: string, data: any, callback?: (err: Error) => void): void;
+    appendFileSync(filename: string, data: any, options?: { encoding?: string; mode?: number; flag?: string; }): void;
+    watchFile(filename: string, listener: { curr: Stats; prev: Stats; }): void;
+    watchFile(filename: string, options: { persistent?: boolean; interval?: number; }, listener: { curr: Stats; prev: Stats; }): void;
+    unwatchFile(filename: string, listener?: Stats): void;
+    watch(filename: string, options?: { persistent?: boolean; }, listener?: (event: string, filename: string) =>any): FSWatcher;
+    exists(path: string, callback?: (exists: boolean) =>void ): void;
+    existsSync(path: string): boolean;
+    createReadStream(path: string, options?: {
         flags?: string;
         encoding?: string;
         fd?: string;
         mode?: number;
         bufferSize?: number;
     }): ReadStream;
-    export function createWriteStream(path: string, options?: {
+    createWriteStream(path: string, options?: {
         flags?: string;
         encoding?: string;
         string?: string;
     }): WriteStream;
 }
 
-declare module "path" {
+declare module path {
     export function normalize(p: string): string;
     export function join(...paths: any[]): string;
     export function resolve(to: string): string;
@@ -821,7 +802,7 @@ declare module "path" {
     export var sep: string;
 }
 
-declare module "string_decoder" {
+declare module string_decoder {
     export interface NodeStringDecoder {
         write(buffer: NodeBuffer): string;
         detectIncompleteChar(buffer: NodeBuffer): number;
@@ -831,10 +812,7 @@ declare module "string_decoder" {
     };
 }
 
-declare module "tls" {
-    import crypto = require("crypto");
-    import net = require("net");
-    import stream = require("stream");
+declare module tls {
 
     var CLIENT_RENEG_LIMIT: number;
     var CLIENT_RENEG_WINDOW: number;
@@ -915,7 +893,7 @@ declare module "tls" {
     export function createSecurePair(credentials?: crypto.Credentials, isServer?: boolean, requestCert?: boolean, rejectUnauthorized?: boolean): SecurePair;
 }
 
-declare module "crypto" {
+declare module crypto {
     export interface CredentialDetails {
         pfx: string;
         key: string;
@@ -978,8 +956,7 @@ declare module "crypto" {
     export function randomBytes(size: number, callback?: (err: Error, buf: NodeBuffer) =>void ): void;
 }
 
-declare module "stream" {
-    import events = require("events");
+declare module stream {
 
     export interface WritableStream extends events.NodeEventEmitter {
         writable: boolean;
@@ -1022,7 +999,7 @@ declare module "stream" {
     export interface ReadWriteStream extends ReadableStream, WritableStream { }
 }
 
-declare module "util" {
+declare module util {
     export function format(format: any, ...param: any[]): string;
     export function debug(string: string): void;
     export function error(...param: any[]): void;
@@ -1037,9 +1014,9 @@ declare module "util" {
     export function inherits(constructor: any, superConstructor: any): void;
 }
 
-declare module "assert" {
+declare module assert {
     function internal (booleanValue: boolean, message?: string): void;
-    module internal {
+    export module internal {
         export function fail(actual: any, expected: any, message: string, operator: string): void;
         export function assert(value: any, message: string): void;
         export function ok(value: any, message?: string): void;
@@ -1053,12 +1030,9 @@ declare module "assert" {
         export function doesNotThrow(block: any, error?: any, messsage?: string): void;
         export function ifError(value: any): void;
     }
-    
-    export = internal;
 }
 
-declare module "tty" {
-    import net = require("net");
+declare module tty {
 
     export function isatty(fd: string): boolean;
     export interface ReadStream extends net.NodeSocket {
@@ -1071,9 +1045,7 @@ declare module "tty" {
     }
 }
 
-declare module "domain" {
-    import events = require("events");
-
+declare module domain {
     export interface Domain extends events.NodeEventEmitter { }
 
     export function create(): Domain;
